@@ -27,11 +27,27 @@
         android:text="Klik"
         android:id="@+id/button" />
 
-    <CheckBox
+    <RadioGroup
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Show"
-        android:checked="true"
-        android:id="@+id/checkBox"/>
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A. Sekarang Hari Sabtu"
+            android:id="@+id/radioButton" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="B. Sekarang Hari Minggu"
+            android:id="@+id/radioButton2" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="C. Sekarang Hari Senin"
+            android:id="@+id/radioButton3" />
+    </RadioGroup>
 
 </LinearLayout>

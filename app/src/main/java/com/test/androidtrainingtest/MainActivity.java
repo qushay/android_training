@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -13,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
     TextView mTextView;
     Button mButton;
     EditText mEditText;
-    CheckBox mCheckBox;
+    RadioButton mRadioButtonSabtu, mRadioButtonMinggu, mRadioButtonSenin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,20 +23,24 @@ public class MainActivity extends AppCompatActivity {
         mTextView = (TextView) findViewById(R.id.textView);
         mButton = (Button) findViewById(R.id.button);
         mEditText = (EditText) findViewById(R.id.editText);
-        mCheckBox = (CheckBox) findViewById(R.id.checkBox);
+        mRadioButtonSabtu = (RadioButton) findViewById(R.id.radioButton);
+        mRadioButtonMinggu = (RadioButton) findViewById(R.id.radioButton2);
+        mRadioButtonSenin = (RadioButton) findViewById(R.id.radioButton3);
         mButton.setOnClickListener(new ButtonAction());
-        mCheckBox.setOnClickListener(new CheckboxAction());
+        mRadioButtonSabtu.setOnClickListener(new RadioButtonAction());
+        mRadioButtonMinggu.setOnClickListener(new RadioButtonAction());
+        mRadioButtonSenin.setOnClickListener(new RadioButtonAction());
     }
 
-    class CheckboxAction implements CheckBox.OnClickListener{
+    class RadioButtonAction implements CheckBox.OnClickListener{
         @Override
         public void onClick(View view) {
-            if (mCheckBox.isChecked()){
-                mCheckBox.setText("Show");
-                mButton.setVisibility(View.VISIBLE);
+            if (view == mRadioButtonSabtu){
+                mTextView.setText("Benar");
+            } else if (view == mRadioButtonMinggu) {
+                mTextView.setText("Salah");
             } else {
-                mCheckBox.setText("Hide");
-                mButton.setVisibility(View.INVISIBLE);
+                mTextView.setText("Salah");
             }
         }
     }
