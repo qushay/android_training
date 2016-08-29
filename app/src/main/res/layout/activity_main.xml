@@ -16,10 +16,14 @@
         android:text="Hello World!"
         android:id="@+id/textView" />
 
-    <Spinner
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/spinner" />
+        android:id="@+id/editText" />
 
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Klik"
+        android:id="@+id/button" />
 </LinearLayout>
