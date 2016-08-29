@@ -1,55 +1,39 @@
 package com.test.androidtrainingtest;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.RadioButton;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     TextView mTextView;
-    Button mButton;
-    EditText mEditText;
-    RadioButton mRadioButtonSabtu, mRadioButtonMinggu, mRadioButtonSenin;
+    Spinner mSpinner;
+    String[] mBuah = {"Apel","Jeruk","Pisang","Semangka","Nanas"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mTextView = (TextView) findViewById(R.id.textView);
-        mButton = (Button) findViewById(R.id.button);
-        mEditText = (EditText) findViewById(R.id.editText);
-        mRadioButtonSabtu = (RadioButton) findViewById(R.id.radioButton);
-        mRadioButtonMinggu = (RadioButton) findViewById(R.id.radioButton2);
-        mRadioButtonSenin = (RadioButton) findViewById(R.id.radioButton3);
-        mButton.setOnClickListener(new ButtonAction());
-        mRadioButtonSabtu.setOnClickListener(new RadioButtonAction());
-        mRadioButtonMinggu.setOnClickListener(new RadioButtonAction());
-        mRadioButtonSenin.setOnClickListener(new RadioButtonAction());
+        mSpinner = (Spinner) findViewById(R.id.spinner);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,mBuah);
+        mSpinner.setAdapter(spinnerAdapter);
+        mSpinner.setOnItemSelectedListener(new spinnerAction());
     }
 
-    class RadioButtonAction implements CheckBox.OnClickListener{
+    class spinnerAction implements Spinner.OnItemSelectedListener{
         @Override
-        public void onClick(View view) {
-            if (view == mRadioButtonSabtu){
-                mTextView.setText("Benar");
-            } else if (view == mRadioButtonMinggu) {
-                mTextView.setText("Salah");
-            } else {
-                mTextView.setText("Salah");
-            }
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            mTextView.setText(adapterView.getSelectedItem().toString());
         }
-    }
 
-    class ButtonAction implements Button.OnClickListener{
         @Override
-        public void onClick(View view) {
-            // action of button
-            mTextView.setText(mEditText.getText().toString());
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
         }
     }
 }
