@@ -8,16 +8,19 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
 import com.test.androidtrainingtest.adapter.DaftarPertanyaanAdapter;
+import com.test.androidtrainingtest.datasource.DatabaseHelper;
 import com.test.androidtrainingtest.datasource.RestClient;
 import com.test.androidtrainingtest.entity.Question;
 
 import java.lang.reflect.Type;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,10 +32,10 @@ public class DaftarPertanyaanActivity extends AppCompatActivity {
     private GridView mGridView;
     private ProgressDialog pDialog;
     final Gson gson = new Gson();
-    String[] mTitle = {"Title 1","Title 2","Title 3","Title 4","Title 5",
-            "Title 6","Title 7","Title 8","Title 9","Title 10"};
-    int[] mJumlah = {3,6,2,5,7,7,2,3,5,5};
+    private DatabaseHelper databaseHelper = null;
     private QuestionsListTask mAuthTask = null;
+    private List<Question> mQuestions;
+    private DaftarPertanyaanAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,19 +47,40 @@ public class DaftarPertanyaanActivity extends AppCompatActivity {
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
 
+        try {
+            final Dao<Question, Integer> questionDao = getHelper().getQuestionDao();
+            mQuestions = questionDao.queryForAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (mQuestions != null && !mQuestions.isEmpty()) {
+            adapter = new DaftarPertanyaanAdapter(DaftarPertanyaanActivity.this,mQuestions);
+            mGridView.setAdapter(adapter);
+        }
+
         showDialog();
         mAuthTask = new QuestionsListTask();
         mAuthTask.execute((Void) null);
+
+        mGridView.setOnItemClickListener(new ListviewAction());
     }
 
     class ListviewAction implements ListView.OnItemClickListener{
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            Toast.makeText(DaftarPertanyaanActivity.this
-                    ,mTitle[i]
-                    ,Toast.LENGTH_SHORT)
-                    .show();
+//            Toast.makeText(DaftarPertanyaanActivity.this
+//                    ,adapterView
+//                    ,Toast.LENGTH_SHORT)
+//                    .show();
         }
+    }
+
+    private DatabaseHelper getHelper() {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(this,DatabaseHelper.class);
+        }
+        return databaseHelper;
     }
 
 
@@ -67,7 +91,6 @@ public class DaftarPertanyaanActivity extends AppCompatActivity {
     public class QuestionsListTask extends AsyncTask<Void, Void, Boolean> {
 
         private String errMessage;
-        private List<Question> mQuestions;
 
         QuestionsListTask() {
             errMessage = "";
@@ -91,6 +114,14 @@ public class DaftarPertanyaanActivity extends AppCompatActivity {
                     Type listType = new TypeToken<ArrayList<Question>>() {}.getType();
                     mQuestions = gson.fromJson(body.get("questions").getAsJsonArray().toString(), listType);
                     errMessage = body.get("message").getAsString();
+                    try {
+                        final Dao<Question, Integer> questionDao = getHelper().getQuestionDao();
+                        for (Question question : mQuestions) {
+                            questionDao.createOrUpdate(question);
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                     return true;
                 } else {
                     errMessage = body.get("message").getAsString();
@@ -107,9 +138,9 @@ public class DaftarPertanyaanActivity extends AppCompatActivity {
             hideDialog();
             try {
                 if (success) {
-                    DaftarPertanyaanAdapter adapter = new DaftarPertanyaanAdapter(DaftarPertanyaanActivity.this,mQuestions);
+                    adapter = new DaftarPertanyaanAdapter(DaftarPertanyaanActivity.this,mQuestions);
                     mGridView.setAdapter(adapter);
-                    mGridView.setOnItemClickListener(new ListviewAction());
+                    adapter.notifyDataSetChanged();
                 }
             }
             catch (Exception e) {
