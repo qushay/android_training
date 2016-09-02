@@ -5,9 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.test.androidtrainingtest.R;
+import com.test.androidtrainingtest.entity.Question;
+
+import java.util.List;
 
 /**
  * Created by Qushay on 30/08/2016.
@@ -16,19 +21,17 @@ public class DaftarPertanyaanAdapter extends BaseAdapter {
 
     private final Context mContext;
     LayoutInflater inflater;
-    private String[] mPertanyaan;
-    private int[] mJumlah;
+    private List<Question> mQuestions;
 
-    public DaftarPertanyaanAdapter(Context context, String[] pertayaan, int[] jumlah) {
+    public DaftarPertanyaanAdapter(Context context, List<Question> questions) {
         this.mContext = context;
         this.inflater = LayoutInflater.from(this.mContext);
-        this.mPertanyaan = pertayaan;
-        this.mJumlah = jumlah;
+        this.mQuestions = questions;
     }
 
     @Override
     public int getCount() {
-        return mPertanyaan.length;
+        return mQuestions.size();
     }
 
     @Override
@@ -53,20 +56,25 @@ public class DaftarPertanyaanAdapter extends BaseAdapter {
             mViewHolder = (MyViewHolder) convertView.getTag();
         }
 
-        String pertanyaan = mPertanyaan[position];
-        int jumlah = mJumlah[position];
+        Question question = mQuestions.get(position);
 
-        mViewHolder.tvTitle.setText(pertanyaan);
-        mViewHolder.tvJumlah.setText(String.valueOf(jumlah));
+        mViewHolder.tvTitle.setText(question.getTitle());
+        Picasso picasso = new Picasso.Builder(mContext)
+                .build();
+        picasso.setIndicatorsEnabled(true);
+        picasso.load(question.getImage())   
+                .placeholder(R.drawable.placeholder)
+                .into(mViewHolder.ivImage);
 
         return convertView;
     }
 
     private class MyViewHolder {
-        TextView tvTitle, tvJumlah;
+        TextView tvTitle;
+        ImageView ivImage;
         public MyViewHolder(View item) {
             tvTitle = (TextView) item.findViewById(R.id.tvTitle);
-            tvJumlah = (TextView) item.findViewById(R.id.tvJumlah);
+            ivImage = (ImageView) item.findViewById(R.id.ivImage);
         }
     }
 }
