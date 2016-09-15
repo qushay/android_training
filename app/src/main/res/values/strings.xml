@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Android Training</string>
     <string name="title_activity_daftar_pertanyaan">Daftar Pertanyaan</string>
+    <string name="title_activity_profile">Profile</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="hint_name">Fullname</string>
