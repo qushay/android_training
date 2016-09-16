@@ -21,6 +21,9 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public class RestClient {
+    public static final String BASE_URL = "http://192.168.0.16";
+//    public static final String BASE_URL = "http://10.0.2.2";
+    public static final String IMAGE_URL = BASE_URL + "/android/training/images/";
 
     private static Retrofit retrofit;
     public static <T> T create(Class<T> service) {
@@ -35,7 +38,7 @@ public class RestClient {
             httpClient.addInterceptor(logging).connectTimeout(15, TimeUnit.SECONDS);
 
             retrofit = new Retrofit.Builder()
-                    .baseUrl("http://10.0.2.2")
+                    .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .client(httpClient.build())
                     .build();

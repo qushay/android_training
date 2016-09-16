@@ -13,10 +13,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.google.gson.Gson;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
 import com.makeramen.roundedimageview.RoundedImageView;
+import com.squareup.picasso.Picasso;
+import com.test.androidtrainingtest.datasource.DatabaseHelper;
+import com.test.androidtrainingtest.datasource.RestClient;
+import com.test.androidtrainingtest.entity.User;
 import com.test.androidtrainingtest.fragment.OneFragment;
 import com.test.androidtrainingtest.fragment.TwoFragment;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,14 +34,37 @@ public class ProfileActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private RoundedImageView ivPhoto;
 
+    private User mUser;
+
     private int TAG_CAMERA_REQUEST = 1;
 
     final Gson gson = new Gson();
+    private DatabaseHelper databaseHelper = null;
+
+    private DatabaseHelper getHelper() {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(this,DatabaseHelper.class);
+        }
+        return databaseHelper;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            int uid = extras.getInt(User.TAG_UID);
+            try {
+                final Dao<User, Integer> userDao = getHelper().getUserDao();
+                mUser = userDao.queryForId(uid);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
 
         ivPhoto = (RoundedImageView) findViewById(R.id.profile_photo);
         ivPhoto.setOnClickListener(new View.OnClickListener() {
@@ -43,6 +73,12 @@ public class ProfileActivity extends AppCompatActivity {
                 startCamera();
             }
         });
+        Picasso picasso = new Picasso.Builder(this)
+                .build();
+        picasso.setIndicatorsEnabled(true);
+        picasso.load(RestClient.IMAGE_URL + mUser.getPhoto())
+                .placeholder(R.drawable.placeholder)
+                .into(ivPhoto);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -53,8 +89,8 @@ public class ProfileActivity extends AppCompatActivity {
     }
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new OneFragment(), "Profil");
-        adapter.addFragment(new TwoFragment(), "Lokasi");
+        adapter.addFragment(new OneFragment().newInstance(mUser), "Profil");
+        adapter.addFragment(new TwoFragment().newInstance(mUser), "Lokasi");
         viewPager.setAdapter(adapter);
     }
 

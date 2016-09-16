@@ -12,8 +12,13 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
+import com.test.androidtrainingtest.datasource.DatabaseHelper;
 import com.test.androidtrainingtest.datasource.RestClient;
 import com.test.androidtrainingtest.entity.User;
+
+import java.sql.SQLException;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -27,6 +32,15 @@ public class LoginActivity extends Activity {
     private ProgressDialog pDialog;
     private UserLoginTask mAuthTask = null;
     final Gson gson = new Gson();
+    private DatabaseHelper databaseHelper = null;
+
+
+    private DatabaseHelper getHelper() {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(this,DatabaseHelper.class);
+        }
+        return databaseHelper;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -109,6 +123,12 @@ public class LoginActivity extends Activity {
                 if (body.get("success").getAsBoolean()){
                     mUser = gson.fromJson(body.get("user").getAsJsonObject().toString(), User.class);
                     errMessage = body.get("message").getAsString();
+                    try {
+                        final Dao<User, Integer> userDao = getHelper().getUserDao();
+                        userDao.createOrUpdate(mUser);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                     return true;
                 } else {
                     errMessage = body.get("message").getAsString();
@@ -125,9 +145,10 @@ public class LoginActivity extends Activity {
             hideDialog();
             try {
                 if (success) {
-                    Intent tutorialIntent = new Intent(LoginActivity.this, DaftarPertanyaanActivity.class);
-                    tutorialIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);       // remove whole nav stack
-                    LoginActivity.this.startActivity(tutorialIntent);
+                    Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
+                    intent.putExtra(User.TAG_UID, mUser.getUid());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);       // remove whole nav stack
+                    LoginActivity.this.startActivity(intent);
                     finish();
                 }
             }

@@ -17,13 +17,23 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.test.androidtrainingtest.R;
+import com.test.androidtrainingtest.entity.User;
 
 public class TwoFragment extends Fragment {
 
     private GoogleMap mGoogleMap;
     private MapView mMapView;
+    private User mUser;
 
     public TwoFragment() { }
+
+
+    public static TwoFragment newInstance(User user) {
+        TwoFragment fragment = new TwoFragment();
+        fragment.mUser = user;
+
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,9 +46,9 @@ public class TwoFragment extends Fragment {
             @Override
             public void onMapReady(GoogleMap mMap) {
                 mGoogleMap = mMap;
-                LatLng pnm = new LatLng(-6.205385,106.8192383);
-                mGoogleMap.addMarker(new MarkerOptions().position(pnm).title("Marker in Sydney"));
-                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pnm,16));
+                LatLng latLng = new LatLng(mUser.getLatitude(),mUser.getLongitude());
+                mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(mUser.getName()));
+                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,16));
             }
         });
         return view;

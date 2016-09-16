@@ -16,15 +16,25 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.test.androidtrainingtest.R;
+import com.test.androidtrainingtest.entity.User;
 
 public class OneFragment extends Fragment{
 
     TextView tvNama, tvTglLahir, tvTempatLahir, tvAlamat, tvPekerjaan;
     Button btCall, btSms;
-    String mNumber = "081327219704";
+    String mNumber;
+    private User mUser;
 
     public OneFragment() {
         // Required empty public constructor
+    }
+
+    public static OneFragment newInstance(User user) {
+        OneFragment fragment = new OneFragment();
+        fragment.mUser = user;
+        fragment.mNumber = user.getNomor();
+
+        return fragment;
     }
 
     @Override
@@ -65,11 +75,11 @@ public class OneFragment extends Fragment{
             }
         });
 
-        tvNama.setText(Html.fromHtml("Nama <b>Don Juans</b>"));
-        tvTglLahir.setText(Html.fromHtml("Tgl Lahir <b>31 Febuari 1945</b>"));
-        tvTempatLahir.setText(Html.fromHtml("Tempat Lahir <b>Jakarta</b>"));
-        tvAlamat.setText(Html.fromHtml("Alamat <b>Jl. Merdeka Barat No 1, Jakarta</b>"));
-        tvPekerjaan.setText(Html.fromHtml("Pekerjaan <b>Programmer</b>"));
+        tvNama.setText(Html.fromHtml("Nama <b>"+mUser.getName()+"</b>"));
+        tvTglLahir.setText(Html.fromHtml("Tgl Lahir <b>"+mUser.getTglLahir()+"</b>"));
+        tvTempatLahir.setText(Html.fromHtml("Tempat Lahir <b>"+mUser.getTempatLahir()+"</b>"));
+        tvAlamat.setText(Html.fromHtml("Alamat <b>"+mUser.getAlamat()+"</b>"));
+        tvPekerjaan.setText(Html.fromHtml("Pekerjaan <b>"+mUser.getPekerjaan()+"</b>"));
 
         return view;
     }
