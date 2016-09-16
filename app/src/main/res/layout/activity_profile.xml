@@ -28,21 +28,19 @@
             </RelativeLayout>
 
             <com.makeramen.roundedimageview.RoundedImageView
-                android:id="@+id/imageView1"
+                android:id="@+id/profile_photo"
                 android:layout_height="100dp"
                 android:layout_width="100dp"
                 android:layout_marginTop="140dp"
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/selfie"
-                android:scaleType="fitCenter"
+                android:scaleType="centerCrop"
                 app:riv_corner_radius="2dip"
-                app:riv_border_color="#FFF"
-                app:riv_mutate_background="true"
                 app:riv_oval="true" />
 
             <LinearLayout
                 android:id="@+id/profile_name"
-                android:layout_below="@id/imageView1"
+                android:layout_below="@id/profile_photo"
                 android:layout_marginTop="16dp"
                 android:gravity="center"
                 android:orientation="vertical"
