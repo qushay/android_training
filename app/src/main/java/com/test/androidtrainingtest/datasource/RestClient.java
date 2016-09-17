@@ -24,6 +24,7 @@ public class RestClient {
     public static final String BASE_URL = "http://192.168.0.16";
 //    public static final String BASE_URL = "http://10.0.2.2";
     public static final String IMAGE_URL = BASE_URL + "/android/training/images/";
+    public static final String UPLOAD_MAGE_URL = BASE_URL + "/android/training/upload_image.php";
 
     private static Retrofit retrofit;
     public static <T> T create(Class<T> service) {
