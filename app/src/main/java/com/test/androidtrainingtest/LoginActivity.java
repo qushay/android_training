@@ -145,7 +145,7 @@ public class LoginActivity extends Activity {
             hideDialog();
             try {
                 if (success) {
-                    Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra(User.TAG_UID, mUser.getUid());
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);       // remove whole nav stack
                     LoginActivity.this.startActivity(intent);
