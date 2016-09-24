@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         switch (navItemIndex) {
             case 0:
                 // home
-                HomeFragment homeFragment = new HomeFragment();
+                HomeFragment homeFragment = new HomeFragment().newInstance(this);
                 return homeFragment;
             case 1:
                 // photos

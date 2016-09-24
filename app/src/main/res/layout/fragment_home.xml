@@ -4,10 +4,13 @@
     android:layout_height="match_parent"
     tools:context="com.test.androidtrainingtest.fragment.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
+    <GridView
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:numColumns="auto_fit"
+        android:layout_marginTop="60dp"
+        android:id="@+id/gridView"
+        android:stretchMode="columnWidth"
+        android:layout_gravity="center" />
 
 </FrameLayout>

@@ -24,8 +24,8 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 
 public class RestClient {
-    public static final String BASE_URL = "http://192.168.0.21";
-//    public static final String BASE_URL = "http://10.0.2.2";
+//    public static final String BASE_URL = "http://192.168.43.151";
+    public static final String BASE_URL = "http://10.0.2.2";
     public static final String IMAGE_URL = BASE_URL + "/android/training/images/";
     public static final String UPLOAD_MAGE_URL = BASE_URL + "/android/training/upload_image.php";
 
